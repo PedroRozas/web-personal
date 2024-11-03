@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/theme-provider';
+import { scrollToSection } from '@/lib/utils';
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme();
@@ -11,12 +12,31 @@ export default function Navbar() {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
+  const handleNavClick = (sectionId: string) => {
+    scrollToSection(sectionId);
+    setIsOpen(false);
+  };
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <a href="#" className="text-xl font-bold">
-          Pedro Rozas
-        </a>
+      <div className="container flex h-16 items-center justify-between px-4">
+        <div className="flex items-center gap-4">
+          <a href="#" className="text-xl font-bold">
+            Pedro Rozas
+          </a>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="md:hidden"
+          >
+            {theme === 'light' ? (
+              <Moon className="h-5 w-5" />
+            ) : (
+              <Sun className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
 
         {/* Mobile menu button */}
         <Button
@@ -30,18 +50,24 @@ export default function Navbar() {
 
         {/* Desktop menu */}
         <div className="hidden md:flex items-center gap-6">
-          <a href="#services" className="text-sm font-medium hover:text-primary">
+          <button
+            onClick={() => handleNavClick('services')}
+            className="text-sm font-medium hover:text-primary transition-colors"
+          >
             Servicios
-          </a>
-          <a
-            href="#testimonials"
-            className="text-sm font-medium hover:text-primary"
+          </button>
+          <button
+            onClick={() => handleNavClick('testimonials')}
+            className="text-sm font-medium hover:text-primary transition-colors"
           >
             Testimonios
-          </a>
-          <a href="#contact" className="text-sm font-medium hover:text-primary">
+          </button>
+          <button
+            onClick={() => handleNavClick('contact')}
+            className="text-sm font-medium hover:text-primary transition-colors"
+          >
             Contacto
-          </a>
+          </button>
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
             {theme === 'light' ? (
               <Moon className="h-5 w-5" />
@@ -49,35 +75,34 @@ export default function Navbar() {
               <Sun className="h-5 w-5" />
             )}
           </Button>
-          <Button>Solicitar Cotización</Button>
+          <Button onClick={() => handleNavClick('contact')}>
+            Solicitar Cotización
+          </Button>
         </div>
 
         {/* Mobile menu */}
         {isOpen && (
           <div className="absolute top-16 left-0 right-0 bg-background border-b md:hidden">
-            <div className="flex flex-col p-4 space-y-4">
-              <a
-                href="#services"
-                className="text-sm font-medium hover:text-primary"
-                onClick={() => setIsOpen(false)}
+            <div className="flex flex-col p-6 space-y-4">
+              <button
+                onClick={() => handleNavClick('services')}
+                className="text-sm font-medium hover:text-primary transition-colors text-left"
               >
                 Servicios
-              </a>
-              <a
-                href="#testimonials"
-                className="text-sm font-medium hover:text-primary"
-                onClick={() => setIsOpen(false)}
+              </button>
+              <button
+                onClick={() => handleNavClick('testimonials')}
+                className="text-sm font-medium hover:text-primary transition-colors text-left"
               >
                 Testimonios
-              </a>
-              <a
-                href="#contact"
-                className="text-sm font-medium hover:text-primary"
-                onClick={() => setIsOpen(false)}
+              </button>
+              <button
+                onClick={() => handleNavClick('contact')}
+                className="text-sm font-medium hover:text-primary transition-colors text-left"
               >
                 Contacto
-              </a>
-              <Button onClick={() => setIsOpen(false)}>
+              </button>
+              <Button onClick={() => handleNavClick('contact')} className="w-full">
                 Solicitar Cotización
               </Button>
             </div>

@@ -3,6 +3,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Icon } from '@iconify/react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -14,25 +20,29 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
+import type { Service } from '@/types/database';
 
 const formSchema = z.object({
   name: z.string().min(2, 'El nombre es muy corto'),
   email: z.string().email('Email inválido'),
   phone: z.string().min(6, 'Teléfono inválido'),
-  service: z.string().min(1, 'Selecciona un servicio'),
+  service: z.string(),
   message: z.string().min(10, 'El mensaje es muy corto'),
 });
 
-export default function Contact() {
+interface ContactFormModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  service: Service;
+}
+
+export default function ContactFormModal({
+  open,
+  onOpenChange,
+  service,
+}: ContactFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,8 +51,8 @@ export default function Contact() {
       name: '',
       email: '',
       phone: '',
-      service: '',
-      message: '',
+      service: service.title,
+      message: `Me interesa el servicio de ${service.title}. Me gustaría obtener más información.`,
     },
   });
 
@@ -55,6 +65,7 @@ export default function Contact() {
       
       toast.success('Mensaje enviado correctamente');
       form.reset();
+      onOpenChange(false);
     } catch (error) {
       toast.error('Error al enviar el mensaje');
       console.error('Error:', error);
@@ -64,22 +75,13 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="container py-24 sm:py-32 px-4">
-      <div className="flex flex-col items-center space-y-4 text-center animate-slide-up max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-          Contacto
-        </h2>
-        <p className="max-w-[700px] text-muted-foreground md:text-xl">
-          ¿Listo para empezar? Contáctame para discutir tu proyecto
-        </p>
-      </div>
-
-      <div className="mx-auto max-w-[600px] mt-16">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>Solicitar {service.title}</DialogTitle>
+        </DialogHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 stagger-animation"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               name="name"
@@ -155,40 +157,6 @@ export default function Contact() {
 
             <FormField
               control={form.control}
-              name="service"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Servicio</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="transition-all hover:border-primary focus:border-primary">
-                        <SelectValue placeholder="Selecciona un servicio" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="web-design">Diseño Web</SelectItem>
-                      <SelectItem value="web-development">
-                        Desarrollo Web
-                      </SelectItem>
-                      <SelectItem value="seo">SEO</SelectItem>
-                      <SelectItem value="social-media">
-                        Redes Sociales
-                      </SelectItem>
-                      <SelectItem value="maintenance">
-                        Mantenimiento
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="message"
               render={({ field }) => (
                 <FormItem>
@@ -224,7 +192,7 @@ export default function Contact() {
             </Button>
           </form>
         </Form>
-      </div>
-    </section>
+      </DialogContent>
+    </Dialog>
   );
 }
