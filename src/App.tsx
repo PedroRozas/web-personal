@@ -9,20 +9,22 @@ import { Toaster } from '@/components/ui/sonner';
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="pedro-rozas-theme">
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main>
-          <Hero />
-          <Services />
-          <Testimonials />
-          <Contact />
-        </main>
-        <Footer />
-        <Toaster />
-      </div>
-    </ThemeProvider>
+      <ThemeProvider defaultTheme="light" storageKey="pedro-rozas-theme">
+        <div className="min-h-screen bg-background">
+          <Navbar />
+          <main>
+            <Hero />
+            <Services />
+            <Testimonials />
+            <Contact />
+          </main>
+          <Footer />
+          <Toaster />
+        </div>
+      </ThemeProvider>
   );
 }
+
+
 
 export default App;

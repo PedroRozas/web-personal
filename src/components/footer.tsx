@@ -3,9 +3,8 @@ import { Button } from '@/components/ui/button';
 
 export default function Footer() {
   return (
-    <footer className="border-t">
-      <div className="container py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <footer className="border-t w-full px-4 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Pedro Rozas</h3>
             <p className="text-sm text-muted-foreground">
@@ -37,9 +36,9 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Contacto</h3>
             <ul className="space-y-2 text-sm">
-              <li>Madrid, España</li>
-              <li>+34 600 000 000</li>
-              <li>pedro@rozas.dev</li>
+              <li>Villa Alemana, Chile</li>
+              <li>+56957598006</li>
+              <li>pedrorozas90@gmail.com</li>
             </ul>
           </div>
 
@@ -62,13 +61,12 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t text-center text-sm text-muted-foreground">
+        <div className="mt-16 pt-8 border-t text-center text-sm text-muted-foreground max-w-6xl mx-auto">
           <p>
             © {new Date().getFullYear()} Pedro Rozas. Todos los derechos
             reservados.
           </p>
         </div>
-      </div>
-    </footer>
+      </footer>
   );
 }

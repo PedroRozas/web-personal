@@ -68,6 +68,16 @@
   }
 }
 
+@layer base {
+  .text-responsive {
+    font-size: clamp(1rem, 1.5vw + 1rem, 2rem);
+  }
+
+  .text-responsive-lg {
+    font-size: clamp(1.25rem, 2vw + 1rem, 2.5rem);
+  }
+}
+
 /* Custom Animations */
 @keyframes float {
   0% { transform: translateY(0px); }
